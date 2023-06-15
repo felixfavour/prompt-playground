@@ -310,4 +310,11 @@ Color hex string:
     color: #1c1827;
     font-size: 1.2rem;
   }
+
+  @media screen and (max-width: 600px) {
+    .row {
+      flex-direction: column;
+      gap: 2rem;
+    }
+  }
 </style>
