@@ -15,11 +15,11 @@ export default {
 <style scoped>
 
   .prompt-engineering-banner {
-    border: 0.5px solid #8352FF20;
+    border: 0.5px solid #3F75FF20;
     border-radius: 6px;
     padding: 2rem;
     overflow: hidden;
-    background: #8352FF10;
+    background: #3F75FF10;
     position: relative;
   }
   .prompt-engineering-banner h2 {
@@ -28,8 +28,8 @@ export default {
   }
   .prompt-engineering-banner a {
     padding: 0;
-    border-bottom: 1px solid #8352FF;
-    color: #8352FF;
+    border-bottom: 1px solid #3F75FF;
+    color: #3F75FF;
   }
   .abstract {
     transform: scale(8);

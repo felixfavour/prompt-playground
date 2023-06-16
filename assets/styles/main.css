@@ -36,7 +36,7 @@ ul {
 a {
   text-decoration: none;
   font-size: 0.875rem;
-  color: #8352ff;
+  color: #3f75ff;
   min-width: 120px;
   padding: 0 1.5rem;
   height: 45px;
@@ -46,7 +46,7 @@ a {
   padding: 0 1rem;
   height: 45px;
   font-weight: 500;
-  background: #8352ff20;
+  background: #3f75ff20;
   border-radius: 6px;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
@@ -62,10 +62,10 @@ a {
   -o-transition: 0.2s ease-in;
 }
 .btn-link:hover {
-  background: #8352ff10;
+  background: #3f75ff10;
 }
 .btn-link:active {
-  background: #8352ff;
+  background: #3f75ff;
   color: #fff;
 }
 .center {
@@ -250,7 +250,7 @@ a.disabled {
 }
 
 .loader {
-  border: 2px solid #8352ff;
+  border: 2px solid #3f75ff;
   position: relative;
   border-radius: 50%;
   border-top: 2px solid #000;

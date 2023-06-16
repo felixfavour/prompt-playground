@@ -30,7 +30,7 @@ export default {
     padding: 0 1rem;
     height: 45px;
     font-weight: 500;
-    background: #8352FF20;
+    background: #3F75FF20;
     border-radius: 6px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
@@ -46,10 +46,10 @@ export default {
     -o-transition: 0.2s ease-in;
   }
   .btn-link:hover {
-    background: #8352FF10;
+    background: #3F75FF10;
   }
   .btn-link:active {
-    background: #8352FF;
+    background: #3F75FF;
     color: #fff;
   }
 
