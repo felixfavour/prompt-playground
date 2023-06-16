@@ -24,6 +24,10 @@
   }
 }
 
+* {
+  font-family: "Roboto", sans-serif;
+}
+
 html {
   background: #ffff;
 }
