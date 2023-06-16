@@ -1,7 +1,7 @@
 <template>
   <div class="homepage-ctn section">
     <div class="inner">
-      <PromptBanner />
+      <!-- <PromptBanner /> -->
       <div class="main-ctn come-up-2">
         <div class="row row-1">
           <h5>Prompt</h5>
