@@ -134,20 +134,20 @@ Color hex string:
   },
   computed: {
     tokens() {
-      const tokens = this.prompt.split(/\s+/)
-      let totalTokens = 0
-      for (const token of tokens) {
-        totalTokens += token.length
+      const words = this.prompt.split(/\s+/)
+      let totalCharacters = 0
+      for (const word of words) {
+        totalCharacters += word.length
       }
-      return totalTokens
+      return Math.ceil(totalCharacters / 4)
     },
     refinedTokens() {
-      const tokens = this.refinedPrompt.split(/\s+/)
-      let totalTokens = 0
-      for (const token of tokens) {
-        totalTokens += token.length
+      const words = this.refinedPrompt.split(/\s+/)
+      let totalCharacters = 0
+      for (const word of words) {
+        totalCharacters += word.length
       }
-      return totalTokens
+      return Math.ceil(totalCharacters / 4)
     },
     inputFields() {
       return this.getInputsInCurlyBraces(this.prompt)
