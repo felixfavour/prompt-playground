@@ -2,32 +2,35 @@
   <div class="homepage-ctn section">
     <div class="inner">
       <!-- <PromptBanner /> -->
-      <div class="main-ctn come-up-2">
-        <div class="row row-1">
-          <div class="row-header">
-            <h5>Prompt</h5>
-            <p class="tokens">
-              Tokens: {{  tokens  }}
-            </p>
+      <div class="main-ctn come-up">
+        <div class="col-ctn">
+          <div class="row row-1">
+            <div class="row-header">
+              <h5>Prompt</h5>
+              <p class="tokens">
+                Tokens: {{  tokens  }}
+              </p>
+            </div>
+            <div class="row-inner">
+              <textarea v-model="prompt" />
+            </div>
           </div>
-          <div class="row-inner">
-            <textarea v-model="prompt" />
+
+          <div class="row">
+            <h5>Inputs</h5>
+            <div v-for="(inputField, index) in inputFields" v-show="inputField" :key="inputField" class="input-ctn">
+              <!-- <div class="input-display">
+                  {{  inputField  }}
+                </div> -->
+              <input v-model="inputValues[index]" :placeholder="inputField" type="text">
+            </div>
+            <div v-show="error" class="error-bar danger">
+              Fill all inputs first
+            </div>
           </div>
         </div>
         <div class="rows-ctn">
           <div class="row row-2">
-            <div class="col col-1">
-              <h5>Inputs</h5>
-              <div v-for="(inputField, index) in inputFields" v-show="inputField" :key="inputField" class="input-ctn">
-                <div class="input-display">
-                  {{  inputField  }}
-                </div>
-                <input v-model="inputValues[index]" placeholder="Input value here" type="text">
-              </div>
-              <div v-show="error" class="error-bar danger">
-                Fill all inputs first
-              </div>
-            </div>
             <div class="col col-2">
               <div class="row-header">
                 <h5>Preview (Tokens: {{  refinedTokens  }})</h5>
@@ -43,21 +46,29 @@
             </div>
           </div>
           <div class="row row-3">
-            <div class="form-group">
-              <div class="form-group">
+            <div class="form-group bottom-row">
+              <!-- <div class="form-group">
                 <select>
                   <option value="GPT-3">
-                    GPT-3
+                    GPT-3.5 Turbo
                   </option>
                   <option value="Codex">
-                    Codex
+                    GPT-4
                   </option>
                 </select>
                 <div class="icon">
                   <ArrowDown />
                 </div>
+              </div> -->
+              <div class="chip-group">
+                <button @click="gptModel = 'gpt-3.5'" class="chip-btn" :class="{ active: gptModel === 'gpt-3.5' }">
+                  GPT-3.5 Turbo
+                </button>
+                <button @click="gptModel = 'gpt-4'" class="chip-btn" :class="{ active: gptModel === 'gpt-4' }">
+                  GPT-4
+                </button>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <select>
                   <option value="text-davinci-003">
                     text-davinci-003
@@ -75,7 +86,7 @@
                 <div class="icon">
                   <ArrowDown />
                 </div>
-              </div>
+              </div> -->
             </div>
             <div class="actions">
               <!-- <button class="btn-link grayscale">
@@ -109,6 +120,7 @@ export default {
     return {
       error: false,
       isLoading: false,
+      gptModel: 'gpt-3.5',
       response: '',
       inputValues: [],
       prompt: `Given the following fruit, output the closest color hex value that matches the color of that fruit.
@@ -217,6 +229,24 @@ Color hex string:
 .main-ctn {
   margin-top: 2rem;
   overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-ctn>div {
+  flex-basis: 48.5%;
+}
+
+.col-ctn {
+  background: #3F75FF20;
+  justify-content: space-between;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.col-ctn>div {
+  flex-basis: 50%;
 }
 
 .row {
@@ -226,31 +256,24 @@ Color hex string:
   color: #979797;
 }
 
-.row-1 {
-  border-radius: 20px;
-  margin-bottom: 1.5rem;
-}
-
 .row-header {
   display: flex;
   justify-content: space-between;
 }
 
 .rows-ctn {
-  border-radius: 20px;
+  border-radius: 6px;
   margin-bottom: 1.5rem;
+  background: #f2f2f2;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .row-2 {
   background: #f2f2f2;
   color: #4a4a4a;
-  display: flex;
-  justify-content: space-between;
-}
-
-.row-2>div {
-  flex-basis: 47.5%;
 }
 
 .row-3 {
@@ -296,6 +319,10 @@ textarea {
   font-size: 0.9rem;
 }
 
+.row-1 {
+  padding-bottom: 0;
+}
+
 .row-1 h5 {
   color: #1c1827;
 }
@@ -314,6 +341,35 @@ textarea {
   display: inline-grid;
   place-items: center;
   margin-top: 1rem;
+}
+
+.bottom-row {
+  display: flex;
+  align-items: center;
+}
+
+.chip-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.chip-btn {
+  background: #3F75FF10;
+  border: 1px solid #3F75FF;
+  color: #3F75FF;
+  padding: 0 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  transition: 0.2s;
+}
+
+.chip-btn.active {
+  background: #3F75FF;
+  color: #FFFFFF;
 }
 
 .prompt-display {
@@ -361,10 +417,19 @@ input {
   font-size: 1.2rem;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .row {
     flex-direction: column;
     gap: 2rem;
+    padding: 1rem;
+  }
+
+  .main-ctn {
+    flex-direction: column;
+  }
+
+  .main-ctn>div {
+    flex-basis: 100%;
   }
 }
 </style>
