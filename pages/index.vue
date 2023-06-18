@@ -61,7 +61,8 @@
                 </div>
               </div> -->
               <div class="chip-group">
-                <button @click="gptModel = 'gpt-3.5'" class="chip-btn" :class="{ active: gptModel === 'gpt-3.5' }">
+                <button @click="gptModel = 'gpt-3.5-turbo'" class="chip-btn"
+                  :class="{ active: gptModel === 'gpt-3.5-turbo' }">
                   GPT-3.5 Turbo
                 </button>
                 <button @click="gptModel = 'gpt-4'" class="chip-btn" :class="{ active: gptModel === 'gpt-4' }">
@@ -92,7 +93,7 @@
               <!-- <button class="btn-link grayscale">
                 SAVE
               </button> -->
-              <button class="btn-link" @click="generateMockResponse">
+              <button class="btn-link" @click="generateCompletion">
                 RUN
                 <div v-show="isLoading" class="loader" />
               </button>
@@ -114,13 +115,15 @@
 </template>
 
 <script>
+import { OpenAIApi, Configuration } from 'openai'
 export default {
   name: 'HomePage',
   data() {
     return {
       error: false,
+      openAI: null,
       isLoading: false,
-      gptModel: 'gpt-3.5',
+      gptModel: 'gpt-3.5-turbo',
       response: '',
       inputValues: [],
       prompt: `Given the following fruit, output the closest color hex value that matches the color of that fruit.
@@ -131,6 +134,13 @@ Fruit:
 Color hex string:
 `
     }
+  },
+  created() {
+    const configuration = new Configuration({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+    const openai = new OpenAIApi(configuration);
+    this.openAI = openai
   },
   computed: {
     tokens() {
@@ -173,6 +183,19 @@ Color hex string:
         bool = true
       }
       return bool
+    },
+    async generateCompletion() {
+      try {
+        this.isLoading = true
+        const chatCompletion = await this.openAI.createChatCompletion({
+          model: this.gptModel,
+          messages: [{ role: "user", content: "Hello world" }],
+        });
+        this.isLoading = false
+        console.log(chatCompletion.data.choices[0].message);
+      } catch (err) {
+        this.isLoading = false
+      }
     },
     generateMockResponse() {
       if (!this.isAllArrayElementsDefined(this.inputValues)) {
