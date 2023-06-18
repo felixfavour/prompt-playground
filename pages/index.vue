@@ -40,26 +40,16 @@
               <div class="prompt-display">
                 {{  refinedPrompt  }}
               </div>
-              <!-- <p class="tokens">
-                Tokens: {{  refinedTokens  }}
-              </p> -->
+            </div>
+            <div v-show="completion" class="completion-ctn response come-up">
+              <h5>Completion</h5>
+              <p>
+                {{  completion  }}
+              </p>
             </div>
           </div>
           <div class="row row-3">
             <div class="form-group bottom-row">
-              <!-- <div class="form-group">
-                <select>
-                  <option value="GPT-3">
-                    GPT-3.5 Turbo
-                  </option>
-                  <option value="Codex">
-                    GPT-4
-                  </option>
-                </select>
-                <div class="icon">
-                  <ArrowDown />
-                </div>
-              </div> -->
               <div class="chip-group">
                 <button @click="gptModel = 'gpt-3.5-turbo'" class="chip-btn"
                   :class="{ active: gptModel === 'gpt-3.5-turbo' }">
@@ -69,25 +59,6 @@
                   GPT-4
                 </button>
               </div>
-              <!-- <div class="form-group">
-                <select>
-                  <option value="text-davinci-003">
-                    text-davinci-003
-                  </option>
-                  <option value="text-curie-001">
-                    text-curie-001
-                  </option>
-                  <option value="text-babbage-001">
-                    text-babbage-001
-                  </option>
-                  <option value="text-ada-001">
-                    text-ada-001
-                  </option>
-                </select>
-                <div class="icon">
-                  <ArrowDown />
-                </div>
-              </div> -->
             </div>
             <div class="actions">
               <!-- <button class="btn-link grayscale">
@@ -100,14 +71,6 @@
             </div>
           </div>
 
-        </div>
-      </div>
-      <div v-show="response" class="main-ctn completion-ctn response come-up">
-        <div class="row row-1">
-          <h5>Completion</h5>
-          <p>
-            {{  response  }}
-          </p>
         </div>
       </div>
     </div>
@@ -124,8 +87,8 @@ export default {
       openAI: null,
       isLoading: false,
       gptModel: 'gpt-3.5-turbo',
-      response: '',
       inputValues: [],
+      completion: null,
       prompt: `Given the following fruit, output the closest color hex value that matches the color of that fruit.
 
 Fruit:
@@ -137,7 +100,8 @@ Color hex string:
   },
   created() {
     const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: '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',
+      // apiKey: process.env.OPENAI_API_KEY || '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',
     });
     const openai = new OpenAIApi(configuration);
     this.openAI = openai
@@ -185,16 +149,22 @@ Color hex string:
       return bool
     },
     async generateCompletion() {
-      try {
-        this.isLoading = true
-        const chatCompletion = await this.openAI.createChatCompletion({
-          model: this.gptModel,
-          messages: [{ role: "user", content: "Hello world" }],
-        });
-        this.isLoading = false
-        console.log(chatCompletion.data.choices[0].message);
-      } catch (err) {
-        this.isLoading = false
+      if (this.isAllArrayElementsDefined(this.inputValues)) {
+        try {
+          this.error = false
+          this.isLoading = true
+          this.completion = null
+          const chatCompletion = await this.openAI.createChatCompletion({
+            model: this.gptModel,
+            messages: [{ role: "user", content: this.refinedPrompt }],
+          });
+          this.isLoading = false
+          this.completion = chatCompletion.data.choices[0].message?.content;
+        } catch (err) {
+          this.isLoading = false
+        }
+      } else {
+        this.error = true
       }
     },
     generateMockResponse() {
@@ -333,7 +303,7 @@ textarea {
   outline: none;
   width: 100%;
   height: 290px;
-  border-radius: 10px;
+  border-radius: 6px;
   color: #FFFFFF;
   background: #1c1827;
   margin: 1rem 0;
@@ -401,7 +371,7 @@ textarea {
 
 input {
   height: 50px;
-  border-radius: 10px;
+  border-radius: 6px;
   margin: 1rem 0;
   width: 100%;
   padding: 0 1rem;
@@ -435,9 +405,16 @@ input {
 }
 
 /* COMPLETION */
+.completion-ctn {
+  background: #e9e9e9;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
 .completion-ctn p {
   color: #1c1827;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 @media screen and (max-width: 800px) {
