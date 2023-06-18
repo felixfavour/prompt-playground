@@ -19,9 +19,6 @@
           <div class="row">
             <h5>Inputs</h5>
             <div v-for="(inputField, index) in inputFields" v-show="inputField" :key="inputField" class="input-ctn">
-              <!-- <div class="input-display">
-                  {{  inputField  }}
-                </div> -->
               <input v-model="inputValues[index]" :placeholder="inputField" type="text">
             </div>
             <div v-show="error" class="error-bar danger">
@@ -108,20 +105,10 @@ Color hex string:
   },
   computed: {
     tokens() {
-      const words = this.prompt.split(/\s+/)
-      let totalCharacters = 0
-      for (const word of words) {
-        totalCharacters += word.length
-      }
-      return Math.ceil(totalCharacters / 4)
+      return this.tokenCount(this.prompt)
     },
     refinedTokens() {
-      const words = this.refinedPrompt.split(/\s+/)
-      let totalCharacters = 0
-      for (const word of words) {
-        totalCharacters += word.length
-      }
-      return Math.ceil(totalCharacters / 4)
+      return this.tokenCount(this.refinedPrompt)
     },
     inputFields() {
       return this.getInputsInCurlyBraces(this.prompt)
@@ -137,6 +124,14 @@ Color hex string:
     }
   },
   methods: {
+    tokenCount(str) {
+      const words = str.split(/\s+/)
+      let totalCharacters = 0
+      for (const word of words) {
+        totalCharacters += word.length
+      }
+      return Math.ceil(totalCharacters / 4)
+    },
     isAllArrayElementsDefined(arr) {
       let bool = false
       for (const el of arr) {
@@ -167,37 +162,6 @@ Color hex string:
         this.error = true
       }
     },
-    generateMockResponse() {
-      if (!this.isAllArrayElementsDefined(this.inputValues)) {
-        this.error = true
-      } else {
-        this.error = false
-        this.isLoading = true
-        const mockResponses = [
-          '#CECECE',
-          '27 Inches wide',
-          '34 pixels large',
-          '#4192FF',
-          '#F7CE22',
-          '11 Inches Long',
-          '89 rem equivalent',
-          '32 rem equivalent',
-          '#000000',
-          '105 inches',
-          '100rem x 24rem',
-          '911 Inches wide',
-          '#CECECE',
-          '480rem x 95rem',
-          '13vh equivalent',
-          '#3F75FF'
-        ]
-        const randomIndex = Math.floor(Math.random(mockResponses.length) * mockResponses.length)
-        setTimeout(() => {
-          this.response = mockResponses[randomIndex]
-          this.isLoading = false
-        }, 1000)
-      }
-    },
     getInputsInCurlyBraces(prompt) {
       const regex = /\{\{(.*?)\}\}/g
       let matches = regex.exec(prompt)
@@ -207,7 +171,6 @@ Color hex string:
         results.push(matches[1])
         matches = regex.exec(prompt)
       }
-
       return results
     }
   }
