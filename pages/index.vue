@@ -75,7 +75,6 @@
 </template>
 
 <script>
-import { OpenAIApi, Configuration } from 'openai'
 export default {
   name: 'HomePage',
   data() {
@@ -94,14 +93,6 @@ Fruit:
 Color hex string:
 `
     }
-  },
-  created() {
-    const configuration = new Configuration({
-      apiKey: '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',
-      // apiKey: process.env.OPENAI_API_KEY || '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',
-    });
-    const openai = new OpenAIApi(configuration);
-    this.openAI = openai
   },
   computed: {
     tokens() {
@@ -149,12 +140,15 @@ Color hex string:
           this.error = false
           this.isLoading = true
           this.completion = null
-          const chatCompletion = await this.openAI.createChatCompletion({
-            model: this.gptModel,
-            messages: [{ role: "user", content: this.refinedPrompt }],
-          });
+          const promise = await useFetch('/api/prompt', {
+            method: 'POST',
+            body: JSON.stringify({
+              model: this.gptModel,
+              messages: [{ role: "user", content: this.refinedPrompt }]
+            })
+          })
+          this.completion = promise.data.value.data?.content
           this.isLoading = false
-          this.completion = chatCompletion.data.choices[0].message?.content;
         } catch (err) {
           this.isLoading = false
         }
